@@ -1,0 +1,54 @@
+{include="header"}
+<script>
+  function buscar() {
+    $.getJSON("{$fsc->url()}", "ref=" + $('#referencia').val(), function (data) {
+    }).done(function (data) {
+      $('#concepto').text("Articulo: " + data.concepto);
+      $('#stock').text("Stock Actual: " + data.stock);
+
+    });
+  }
+</script>
+
+<div class="container">
+  <form class="form" action="{$fsc->url()}" role="form" method="post" id="form">
+    <h2 class="text-center">Control del inventario</h2>
+    <div class="form-group">
+	<a href="{$fsc->almacenes->url()}">Almacén</a>:
+	<select name="almacen" class="form-control" >
+	  {loop="$fsc->almacenes->all()"}
+	  <option value="{$value->codalmacen}"{if="$value->is_default()"} selected=""{/if}>{$value->nombre}</option>
+	  {/loop}
+	</select>
+    </div>
+<h3 id="concepto">&nbsp;</h3>
+<h3 id="stock">&nbsp;</h3>
+<div class="row">
+  <div class="col-md-6 input-group-lg">
+    <input type="text" name="referencia" placeholder="Referencia" class="form-control input-lg" autocomplete="off" id="referencia" onblur="buscar();" />
+  </div>
+  <div class="col-md-6 input-group-lg">
+    <input type="number" name="cantidad" placeholder="Cantidad" step="any" autocomplete="off" required="" class="form-control input-lg"/>
+  </div>
+
+</div>
+<br/>
+<div class="row">
+  <div class="col-md-1"></div>
+  <div class="col-xs-6 col-sm-6 col-md-4 text-center btn btn-primary" onclick="document.getElementById('form').action = '{$fsc->url()}&entrada=1';document.getElementById('form').submit();">
+    <i class="fa fa-5x fa-sign-in"></i> 
+    <h2>
+      Entrada 
+    </h2>
+  </div>
+  <div class="col-md-2"></div>
+  <div class="col-xs-6 col-sm-6 col-md-4 text-center btn btn-primary" onclick="document.getElementById('form').action = '{$fsc->url()}&salida=1';document.getElementById('form').submit();">
+    <i class="fa fa-5x fa-sign-out"></i> 
+    <h2>
+      Salida 
+    </h2>
+  </div>
+</div>
+</form>
+</div>
+{include="footer"}
