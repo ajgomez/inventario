@@ -9,6 +9,23 @@
     });
   }
 </script>
+<script type="text/javascript">
+   $(document).ready(function () {
+      $("#referencia").autocomplete({
+         serviceUrl: '{$fsc->url()}',
+         paramName: 'buscar_referencia',
+         onSelect: function (suggestion) {
+            if(suggestion)
+            {
+               if( $("#referencia").val() != suggestion.data)
+               {
+                  $("#referencia").val(suggestion.data);
+               }
+            }
+         }
+      });
+   });
+</script>
 
 <div class="container">
   <form class="form" action="{$fsc->url()}" role="form" method="post" id="form">

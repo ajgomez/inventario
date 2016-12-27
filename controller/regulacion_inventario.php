@@ -36,6 +36,8 @@ class regulacion_inventario extends fs_controller {
       $this->nueva_entrada();
     } elseif(isset ($_GET['salida'])){
       $this->nueva_salida();
+    } elseif(isset ($_GET['buscar_referencia'])){
+      $this->buscar_referencia();
     }
   }
   public function busca_articulo() {
@@ -54,7 +56,23 @@ class regulacion_inventario extends fs_controller {
       }
     
   }
-  
+
+   private function buscar_referencia()
+   {
+      /// desactivamos la plantilla HTML
+      $this->template = FALSE;
+      
+      $articulo = new articulo();
+      $json = array();
+      foreach($articulo->search($_REQUEST['buscar_referencia']) as $art)
+      {
+         $json[] = array('value' => $art->referencia.' '.$art->descripcion(60), 'data' => $art->referencia);
+      }
+      
+      header('Content-Type: application/json');
+      echo json_encode( array('query' => $_REQUEST['buscar_referencia'], 'suggestions' => $json) );
+   }
+     
   public function nueva_entrada() {
     if ($_POST['referencia'] == "" || $_POST['cantidad'] == 0) {
       $this->new_error_msg("Datos incompletos, no se ha hecho ningún cambio");

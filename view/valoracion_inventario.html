@@ -1,0 +1,64 @@
+{include="header2"}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-8">
+      <h2> <span class="fa fa-copy"></span> Valoracion de Articulos en stock </h2>
+    </div>
+    <div class="col-sm-4 text-right">
+      <div class="form-group">
+	<a href="{$fsc->url()}&generar=TRUE&imprimir=TRUE" class="btn btn-sm btn-default" target="_blank"> <span class="fa fa-print"></span> Imprimir</a>
+	<a href="{$fsc->url()}&generar=TRUE&descargar=TRUE" class="btn btn-sm btn-default"> <span class="fa fa-download"></span> Excel</a>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+	<tr>
+	  <th>referencia</th>
+	  <th>Descripcion</th>
+	  <th>Stock</th>
+	  <th>Costo</th>
+	  <th>Total costo</th>
+	  <th>PVP</th>
+	  <th>Total PVP</th>
+	  <th>Margen</th>
+	</tr>
+      </thead>
+      <tbody>
+	<!--{$total_coste = 0}-->
+	<!--{$total_venta = 0}-->
+	{loop="fsc->listado"}
+	<tr>
+	  <td><a href="index.php?page=ventas_articulo&ref={$value->referencia}" target="_blank" >{$value->referencia}</a></td>
+	  <td>{$value->descripcion}</td>
+	  <td>{$value->stockfis}</td>
+	  <td>{$fsc->show_precio($value->preciocoste)}</td>
+	  <td>{$fsc->show_precio($value->preciocoste * $value->stockfis)}</td>
+	  <td>{$fsc->show_precio($value->pvp)}</td>
+	  <td>{$fsc->show_precio($value->pvp* $value->stockfis)}</td>
+	  <td>{$fsc->show_numero((1-($value->preciocoste/$value->pvp))*100)} %</td>
+	</tr>
+	<!--{$total_coste +=$value->preciocoste * $value->stockfis}-->
+	<!--{$total_venta +=$value->pvp * $value->stockfis}-->
+	{else}
+	<tr>
+	  <td colspan="5">No hay resultados para mostrar</td>
+	</tr>  
+	{/loop}
+	{if="$total_coste>0"}
+	<tr>
+	  <hr/>
+	  <td colspan="3" ><strong>Valor Inventario</strong></td>
+	  <td>Total Costo</td>
+	  <td>{$fsc->show_precio($total_coste)}</td>
+	  <td>Total PVP</td>
+	  <td>{$fsc->show_precio($total_venta)}</td>
+	</tr>  
+      {/if}
+      </tbody>
+    </table>
+  </div>
+</div>
+{include="footer2"}
